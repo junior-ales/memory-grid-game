@@ -6,10 +6,10 @@ module.exports = {
         'app.js': /^app/
       }
     },
-    stylesheets: {joinTo: 'app.css'}
+    stylesheets: { joinTo: 'app.css' }
   },
 
   plugins: {
-    babel: {presets: ['es2015', 'react']}
+    babel: { presets: ['es2015', 'react'] }
   }
 };
