@@ -39,10 +39,13 @@ class Game extends React.Component {
   }
 
   recordGuess({cellId, userGuessIsCorrect}) {
-    let { correctGuesses, wrongGuesses } = this.state;
+    let { correctGuesses, wrongGuesses, gameState } = this.state;
 
     userGuessIsCorrect ? correctGuesses.push(cellId) : wrongGuesses.push(cellId);
-    this.setState({ correctGuesses, wrongGuesses });
+    if (correctGuesses.length === this.props.activeCellsCount) { gameState = 'won'; }
+    if (wrongGuesses.length > this.props.allowedWrongAttempts) { gameState = 'lost'; }
+
+    this.setState({ correctGuesses, wrongGuesses, gameState });
   }
 
   render() {
@@ -67,5 +70,9 @@ class Game extends React.Component {
     );
   }
 }
+
+Game.defaultProps = {
+  allowedWrongAttempts: 2
+};
 
 export default Game;
