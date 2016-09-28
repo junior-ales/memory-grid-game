@@ -60,7 +60,9 @@ class Game extends React.Component {
             )}
           </Row>
         ))}
-        <Footer gameState={this.state.gameState} />
+        <Footer gameState={this.state.gameState}
+                correctGuesses={this.state.correctGuesses}
+                activeCellsCount={this.props.activeCellsCount} />
       </div>
     );
   }
