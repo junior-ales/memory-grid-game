@@ -23,7 +23,11 @@ class Game extends React.Component {
 
     this.activeCells = sampleSize(flatten(this.matrix), this.props.activeCellsCount);
 
-    this.state = { gameState: 'ready' };
+    this.state = {
+      gameState: 'ready',
+      correctGuesses: [],
+      wrongGuesses: []
+    };
   }
 
   componentDidMount() {
@@ -34,13 +38,27 @@ class Game extends React.Component {
     }, 2000);
   }
 
+  recordGuess({cellId, userGuessIsCorrect}) {
+    let { correctGuesses, wrongGuesses } = this.state;
+
+    userGuessIsCorrect ? correctGuesses.push(cellId) : wrongGuesses.push(cellId);
+    this.setState({ correctGuesses, wrongGuesses });
+  }
+
   render() {
     return (
       <div className="grid">
         {this.matrix.map((row, ri) => (
-        <Row key={ri}>
-          {row.map(cellId => <Cell key={cellId} id={cellId} activeCells={this.activeCells} gameState={this.state.gameState} />)}
-        </Row>
+          <Row key={ri}>
+            {row.map(cellId =>
+              <Cell key={cellId} id={cellId}
+                    activeCells={this.activeCells}
+                    recordGuess={this.recordGuess.bind(this)}
+                    correctGuesses={this.state.correctGuesses}
+                    wrongGuesses={this.state.wrongGuesses}
+                    gameState={this.state.gameState} />
+            )}
+          </Row>
         ))}
         <Footer gameState={this.state.gameState} />
       </div>
