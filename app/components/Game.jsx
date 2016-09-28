@@ -33,7 +33,15 @@ class Game extends React.Component {
   componentDidMount() {
     setTimeout(() => {
       this.setState({ gameState: 'memorize' }, () => {
-        setTimeout(() => this.setState({ gameState: 'recall' }), 2000);
+        setTimeout(() => {
+          this.setState({ gameState: 'recall' }, () => {
+            setTimeout(() => {
+              if (this.state.gameState === 'recall') {
+                this.setState({ gameState: 'lost' });
+              }
+            }, 10000);
+          });
+        }, 2000);
       });
     }, 2000);
   }
