@@ -1,8 +1,22 @@
 import React from 'react';
 import Cell from './Cell';
 import Row from './Row';
+import Footer from './Footer';
 
 class Game extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { gameState: 'ready' };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ gameState: 'memorize' }, () => {
+        setTimeout(() => this.setState({ gameState: 'recall' }), 2000);
+      });
+    }, 2000);
+  }
+
   render() {
     let matrix = [], row;
 
@@ -22,6 +36,7 @@ class Game extends React.Component {
             {row.map(cellId => <Cell key={cellId} id={cellId} />)}
           </Row>
         ))}
+        <Footer {...this.state} />
       </div>
     );
   }
