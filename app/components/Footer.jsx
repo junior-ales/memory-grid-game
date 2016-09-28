@@ -20,7 +20,7 @@ class Footer extends React.Component {
       </div>
     );
 
-    if (['won', 'lost'].indexOf(this.props.gameState) > -1) return playAgainEl;
+    if (['won', 'lost'].indexOf(this.props.gameState) > -1) { return playAgainEl; }
   }
 
   render() {

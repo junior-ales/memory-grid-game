@@ -31,11 +31,11 @@ class Game extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
+    this.memorizeTimerId = setTimeout(() => {
       this.setState({ gameState: 'memorize' }, () => {
-        setTimeout(() => {
+        this.recallTimerId = setTimeout(() => {
           this.setState({ gameState: 'recall' }, () => {
-            setTimeout(() => {
+            this.gameLimitTimerId = setTimeout(() => {
               if (this.state.gameState === 'recall') {
                 this.setState({ gameState: 'lost' });
               }
@@ -44,6 +44,12 @@ class Game extends React.Component {
         }, 2000);
       });
     }, 2000);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.memorizeTimerId);
+    clearTimeout(this.recallTimerId);
+    clearTimeout(this.gameLimitTimerId);
   }
 
   recordGuess({cellId, userGuessIsCorrect}) {
