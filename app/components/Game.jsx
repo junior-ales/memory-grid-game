@@ -49,6 +49,8 @@ class Game extends React.Component {
   }
 
   render() {
+    let showActiveCells = ['memorize', 'lost'].indexOf(this.state.gameState) > -1;
+
     return (
       <div className="grid">
         {this.matrix.map((row, ri) => (
@@ -56,6 +58,7 @@ class Game extends React.Component {
             {row.map(cellId =>
               <Cell key={cellId} id={cellId}
                     activeCells={this.activeCells}
+                    showActiveCells={showActiveCells}
                     recordGuess={this.recordGuess.bind(this)}
                     correctGuesses={this.state.correctGuesses}
                     wrongGuesses={this.state.wrongGuesses}
