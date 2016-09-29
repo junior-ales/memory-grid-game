@@ -1,5 +1,5 @@
 import React from 'react';
-import { flatten, sampleSize } from 'lodash';
+import { range, flatten, sampleSize } from 'lodash';
 
 import Cell from './Cell';
 import Row from './Row';
@@ -9,19 +9,11 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
 
-    this.matrix = [];
-    let row;
+    this.matrix = range(props.rows).map(rowId => {
+      return range(props.columns).map(colId => `${rowId}${colId}`);
+    });
 
-    for (let r = 0; r < this.props.rows; r++) {
-      row = [];
-      for (let c = 0; c < this.props.columns; c++) {
-        row.push(`${r}${c}`);
-      }
-
-      this.matrix.push(row);
-    }
-
-    this.activeCells = sampleSize(flatten(this.matrix), this.props.activeCellsCount);
+    this.activeCells = sampleSize(flatten(this.matrix), props.activeCellsCount);
 
     this.state = {
       gameState: 'ready',
