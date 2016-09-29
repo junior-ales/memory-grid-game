@@ -25,15 +25,7 @@ class Game extends React.Component {
   componentDidMount() {
     this.memorizeTimerId = setTimeout(() => {
       this.setState({ gameState: 'memorize' }, () => {
-        this.recallTimerId = setTimeout(() => {
-          this.setState({ gameState: 'recall' }, () => {
-            this.gameLimitTimerId = setTimeout(() => {
-              if (this.state.gameState === 'recall') {
-                this.setState({ gameState: 'lost' });
-              }
-            }, this.props.gameDurationInSecs * 1000);
-          });
-        }, 2000);
+        this.recallTimerId = setTimeout(this.startRecallMode.bind(this), 2000);
       });
     }, 2000);
   }
@@ -41,23 +33,43 @@ class Game extends React.Component {
   componentWillUnmount() {
     clearTimeout(this.memorizeTimerId);
     clearTimeout(this.recallTimerId);
-    clearTimeout(this.gameLimitTimerId);
+    this.finishGame();
+  }
+
+  startRecallMode() {
+    this.setState({ gameState: 'recall' }, () => {
+      this.secondsRemaining = this.props.timeoutSeconds;
+
+      this.playTimerId = setInterval(() => {
+        if (--this.secondsRemaining === 0) {
+          this.setState({ gameState: this.finishGame('lost') });
+        }
+      }, 1000);
+    });
+  }
+
+  finishGame(gameState) {
+    clearInterval(this.playTimerId);
+    return gameState;
   }
 
   recordGuess({cellId, userGuessIsCorrect}) {
     let { correctGuesses, wrongGuesses, gameState } = this.state;
+    console.log(this.secondsRemaining);
 
     userGuessIsCorrect ? correctGuesses.push(cellId) : wrongGuesses.push(cellId);
 
     if (correctGuesses.length === this.props.activeCellsCount) {
-      gameState = 'won';
+      gameState = this.finishGame('won');
 
       if (wrongGuesses.length === 0) this.props.updateScore(3);
       else if (wrongGuesses.length === 1) this.props.updateScore(2);
       else this.props.updateScore(1);
     }
 
-    if (wrongGuesses.length > this.props.allowedWrongAttempts) { gameState = 'lost'; }
+    if (wrongGuesses.length > this.props.allowedWrongAttempts) {
+      gameState = this.finishGame('lost');
+    }
 
     this.setState({ correctGuesses, wrongGuesses, gameState });
   }
@@ -94,7 +106,7 @@ Game.defaultProps = {
   rows: 5,
   columns: 5,
   activeCellsCount: 6,
-  gameDurationInSecs: 10
+  timeoutSeconds: 10
 };
 
 export default Game;
