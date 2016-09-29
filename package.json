@@ -1,11 +1,11 @@
 {
-  "name": "your-app",
-  "description": "Description",
-  "author": "Your Name",
-  "version": "0.0.1",
+  "name": "memory-grid-game",
+  "description": "A memory grid game to train react js",
+  "author": "Junior Ales",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/junior-ales/memory-grid-game"
   },
   "scripts": {
     "start": "brunch watch --server",
