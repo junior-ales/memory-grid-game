@@ -39,7 +39,7 @@ class Game extends React.Component {
               if (this.state.gameState === 'recall') {
                 this.setState({ gameState: 'lost' });
               }
-            }, 10000);
+            }, this.props.gameDurationInSecs * 1000);
           });
         }, 2000);
       });
@@ -90,7 +90,11 @@ class Game extends React.Component {
 }
 
 Game.defaultProps = {
-  allowedWrongAttempts: 2
+  allowedWrongAttempts: 2,
+  rows: 5,
+  columns: 5,
+  activeCellsCount: 6,
+  gameDurationInSecs: 10
 };
 
 export default Game;

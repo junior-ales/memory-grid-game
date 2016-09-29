@@ -15,8 +15,6 @@ class App extends React.Component {
     return (
       <div id="content">
         <Game key={this.state.gameId}
-              rows={5} columns={5}
-              activeCellsCount={6}
               createNewGame={this.createNewGame.bind(this)} />
       </div>
     );
