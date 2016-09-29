@@ -53,18 +53,27 @@ class Game extends React.Component {
     return gameState;
   }
 
+  calculateScore(wrongGuesses) {
+    let score;
+
+    if (wrongGuesses === 0) score = 3;
+    else if (wrongGuesses === 1) score = 2;
+    else score = 1;
+
+    const bonusTimeout = this.props.timeoutSeconds / 2;
+    if (this.secondsRemaining >= bonusTimeout) score *= 2;
+
+    return score;
+  }
+
   recordGuess({cellId, userGuessIsCorrect}) {
     let { correctGuesses, wrongGuesses, gameState } = this.state;
-    console.log(this.secondsRemaining);
 
     userGuessIsCorrect ? correctGuesses.push(cellId) : wrongGuesses.push(cellId);
 
     if (correctGuesses.length === this.props.activeCellsCount) {
       gameState = this.finishGame('won');
-
-      if (wrongGuesses.length === 0) this.props.updateScore(3);
-      else if (wrongGuesses.length === 1) this.props.updateScore(2);
-      else this.props.updateScore(1);
+      this.props.updateScore(this.calculateScore(wrongGuesses.length));
     }
 
     if (wrongGuesses.length > this.props.allowedWrongAttempts) {
