@@ -81,6 +81,7 @@ class Game extends React.Component {
           </Row>
         ))}
         <Footer gameState={this.state.gameState}
+                playAgain={this.props.createNewGame}
                 correctGuesses={this.state.correctGuesses}
                 activeCellsCount={this.props.activeCellsCount} />
       </div>

@@ -14,7 +14,7 @@ class Footer extends React.Component {
   playAgain() {
     let playAgainEl = (
       <div>
-        <button onClick={() => document.location.reload()}>
+        <button onClick={this.props.playAgain.bind(this)}>
           Play Again
         </button>
       </div>
