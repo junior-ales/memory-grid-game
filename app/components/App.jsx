@@ -1,8 +1,10 @@
 import React from 'react';
-import { toPairs, fromPairs, map, compose, identity } from 'lodash/fp';
+import { mapValues, identity, add } from 'lodash/fp';
 
 import Game from './Game';
 import ScoreBoard from './ScoreBoard';
+
+const inc = add(1);
 
 class App extends React.Component {
   constructor(props) {
@@ -20,11 +22,12 @@ class App extends React.Component {
   }
 
   playAgain(lastGameStatus) {
-    const transformFn = lastGameStatus === 'won' ? map(([k, v]) => [k, v+1]) : identity;
-    const nextLevel = compose(fromPairs, transformFn, toPairs);
-    const gameLevel = nextLevel(this.state.gameLevel);
+    const nextLevel = mapValues(lastGameStatus === 'won' ? inc : identity);
 
-    this.setState({ gameId: this.state.gameId + 1, gameLevel });
+    this.setState({
+      gameId: inc(this.state.gameId),
+      gameLevel: nextLevel(this.state.gameLevel)
+    });
   }
 
   updateScore(points) {
