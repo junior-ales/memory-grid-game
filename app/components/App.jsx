@@ -6,6 +6,10 @@ import ScoreBoard from './ScoreBoard';
 
 const inc = add(1);
 
+const nextLevel = (status, level) => {
+  return mapValues(status === 'won' ? inc : identity, level);
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -22,11 +26,9 @@ class App extends React.Component {
   }
 
   playAgain(lastGameStatus) {
-    const nextLevel = mapValues(lastGameStatus === 'won' ? inc : identity);
-
     this.setState({
       gameId: inc(this.state.gameId),
-      gameLevel: nextLevel(this.state.gameLevel)
+      gameLevel: nextLevel(lastGameStatus, this.state.gameLevel)
     });
   }
 
