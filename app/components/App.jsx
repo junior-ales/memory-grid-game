@@ -1,4 +1,6 @@
 import React from 'react';
+import { toPairs, fromPairs, map, compose, identity } from 'lodash/fp';
+
 import Game from './Game';
 import ScoreBoard from './ScoreBoard';
 
@@ -8,12 +10,21 @@ class App extends React.Component {
 
     this.state = {
       gameId: 1,
-      totalScore: 0
+      totalScore: 0,
+      gameLevel: {
+        rows: 5,
+        columns: 5,
+        activeCellsCount: 6
+      }
     };
   }
 
-  createNewGame() {
-    this.setState({ gameId: this.state.gameId + 1 });
+  playAgain(lastGameStatus) {
+    const transformFn = lastGameStatus === 'won' ? map(([k, v]) => [k, v+1]) : identity;
+    const nextLevel = compose(fromPairs, transformFn, toPairs);
+    const gameLevel = nextLevel(this.state.gameLevel);
+
+    this.setState({ gameId: this.state.gameId + 1, gameLevel });
   }
 
   updateScore(points) {
@@ -25,8 +36,9 @@ class App extends React.Component {
       <div id="content">
         <ScoreBoard score={this.state.totalScore} />
         <Game key={this.state.gameId}
+              gameLevel={this.state.gameLevel}
               updateScore={this.updateScore.bind(this)}
-              createNewGame={this.createNewGame.bind(this)} />
+              playAgain={this.playAgain.bind(this)} />
       </div>
     );
   }

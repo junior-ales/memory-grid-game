@@ -9,11 +9,13 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
 
-    this.matrix = range(props.rows).map(rowId => {
-      return range(props.columns).map(colId => `${rowId}${colId}`);
+    const { rows, columns, activeCellsCount } = props.gameLevel;
+
+    this.matrix = range(rows).map(rowId => {
+      return range(columns).map(colId => `${rowId}${colId}`);
     });
 
-    this.activeCells = sampleSize(flatten(this.matrix), props.activeCellsCount);
+    this.activeCells = sampleSize(flatten(this.matrix), activeCellsCount);
 
     this.state = {
       gameState: 'ready',
@@ -71,7 +73,7 @@ class Game extends React.Component {
 
     userGuessIsCorrect ? correctGuesses.push(cellId) : wrongGuesses.push(cellId);
 
-    if (correctGuesses.length === this.props.activeCellsCount) {
+    if (correctGuesses.length === this.props.gameLevel.activeCellsCount) {
       gameState = this.finishGame('won');
       this.props.updateScore(this.calculateScore(wrongGuesses.length));
     }
@@ -102,9 +104,9 @@ class Game extends React.Component {
           </Row>
         ))}
         <Footer gameState={this.state.gameState}
-                playAgain={this.props.createNewGame}
+                playAgain={this.props.playAgain}
                 correctGuesses={this.state.correctGuesses}
-                activeCellsCount={this.props.activeCellsCount} />
+                activeCellsCount={this.props.gameLevel.activeCellsCount} />
       </div>
     );
   }
@@ -112,9 +114,6 @@ class Game extends React.Component {
 
 Game.defaultProps = {
   allowedWrongAttempts: 2,
-  rows: 5,
-  columns: 5,
-  activeCellsCount: 6,
   timeoutSeconds: 10
 };
 
